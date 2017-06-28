@@ -30,9 +30,9 @@
 PDF나 HTML로 복사해 갈 수 있다.
 
 아래 언어로 번역된 가이드가 있다:
-
+* [영어(원본)](https://github.com/bbatsov/clojure-style-guide/blob/master/README.md)
+* [중국어](https://github.com/geekerzp/clojure-style-guide/blob/master/README-zhCN.md)
 * [일본어](https://github.com/totakke/clojure-style-guide/blob/ja/README.md)
-* [한글](https://github.com/kwakbab/clojure-style-guide/blob/master/README-koKO.md)
 
 ## Table of Contents
 
@@ -57,7 +57,8 @@ PDF나 HTML로 복사해 갈 수 있다.
 > -- Jerry Coffin (on indentation)
 
 * <a name="two-spaces"></a>
-  탭은 들여쓰기 단위별로 **스페이스** 2칸을 사용하라. hard tab사용 안함
+  들여쓰기는 **스페이스** 를 사용하라. hard tab사용 안함
+  **스페이스** 2칸을 사용하여 바디 매개변수가 있는 폼의 바디를 들여쓰기 하라. `def` 폼, 스페셜 폼, 매크로를 다 포함한다.
 <sup>[[link](#two-spaces)]</sup>
 
     ```Clojure
@@ -71,7 +72,7 @@ PDF나 HTML로 복사해 갈 수 있다.
     ```
 
 * <a name="vertically-align-fn-args"></a>
-  함수의 인수는 세로로 줄 맞춤 한다.
+  여러줄에 걸쳐서 작성할 때, 함수(매크로)의 인수는 세로로 줄 맞춤 한다.
 <sup>[[link](#vertically-align-fn-args)]</sup>
 
     ```Clojure
@@ -84,9 +85,34 @@ PDF나 HTML로 복사해 갈 수 있다.
       (range 1 10))
     ```
 
+* <a name="one-space-indent"></a>
+  함수(매크로)이름과 같은 라인에 인수가 하나도 없으면, 한 칸 스페이스를 상용한다.
+<sup>[[link](#vertically-align-fn-args)]</sup>
+    ```Clojure
+    ;; 좋은 예
+    (filter
+     even?
+     (range 1 10))
+
+    (or
+     ala
+     bala
+     portokala)
+
+    ;; 나쁜 예 - 두 칸 스페이스 들여쓰기
+    (filter
+      even?
+      (range 1 10))
+
+    (or
+      ala
+      bala
+      portokala)
+    ```
+
 * <a name="vertically-align-let-and-map"></a>
-  let이 바인딩하는 것과 map키워드는 세로로 줄맞춤한다.
-<sup>[[link](#vertically-align-let-and-map)]</sup>
+  `let`이 바인딩하는 것과 map키워드는 세로로 줄맞춤한다.
+<sup>[[link](#one-space-indent)]</sup>
 
     ```Clojure
     ;; 좋은 예
@@ -121,6 +147,49 @@ PDF나 HTML로 복사해 갈 수 있다.
     (defn foo
       [x] (bar x))
     ```
+
+* <a name="multimethod-dispatch-val-placement"></a>
+  멀티메서드의 `dispatch-val`은 함수이름과 같은 라인에 둔다.
+<sup>[[link](#multimethod-dispatch-val-placement)]</sup>
+
+
+    ```Clojure
+    ;; good
+    (defmethod foo :bar [x] (baz x))
+
+    (defmethod foo :bar
+      [x]
+      (baz x))
+
+    ;; bad
+    (defmethod foo
+      :bar
+      [x]
+      (baz x))
+
+    (defmethod foo
+      :bar [x]
+      (baz x))
+    ```
+
+* <a name="docstring-after-fn-name"></a>
+  docstring을 추가할 때(especially to a function using the above form) 
+  함수명 다음에 오도록 하고, 인수백터 다음에 오지 않도록 주의한다. 후자는 유효하지 않은 문법이며, 에러를 발생시킨다. 
+  but includes the string as a form in the function body without attaching it to
+  the var as documentation.
+<sup>[[link](#docstring-after-fn-name)]</sup>
+
+    ```Clojure
+    ;; good
+    (defn foo
+      "docstring"
+      [x]
+      (bar x))
+
+    ;; bad
+    (defn foo [x]
+      "docstring"
+      (bar x))
 
 * <a name="oneline-short-fn"></a>
   인수 벡터와 본체가 짧은 함수 사이의 개행은 생략할 수도 있다.
